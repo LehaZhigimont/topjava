@@ -29,21 +29,15 @@ public class UserMealsUtil {
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         List<UserMealWithExcess> userMealWithExcesses = new ArrayList<>();
         Map<Integer, Integer> caloriesAllDay = new HashMap<>();
-        int countCalories;
         boolean boolExcess;
 
         for (UserMeal userMeal : meals) {
-            if (!caloriesAllDay.containsKey(userMeal.getDateTime().getDayOfMonth())) {
-                caloriesAllDay.put(userMeal.getDateTime().getDayOfMonth(), userMeal.getCalories());
-            } else if (caloriesAllDay.containsKey(userMeal.getDateTime().getDayOfMonth())) {
-                countCalories = caloriesAllDay.get(userMeal.getDateTime().getDayOfMonth()) + userMeal.getCalories();
-                caloriesAllDay.put(userMeal.getDateTime().getDayOfMonth(), countCalories);
-            }
+            caloriesAllDay.merge(userMeal.getDateTime().getDayOfMonth(), userMeal.getCalories(), Integer::sum);
         }
 
         for (UserMeal userMeal : meals) {
             if (TimeUtil.isBetweenHalfOpen(userMeal.getDateTime().toLocalTime(), startTime, endTime)) {
-                boolExcess = caloriesPerDay < caloriesAllDay.get(userMeal.getDateTime().getDayOfMonth());
+                boolExcess = caloriesPerDay <= caloriesAllDay.get(userMeal.getDateTime().getDayOfMonth());
                 userMealWithExcesses.add(new UserMealWithExcess(userMeal.getDateTime(), userMeal.getDescription(), userMeal.getCalories(), boolExcess));
             }
         }
