@@ -1,0 +1,44 @@
+table {
+    border: 1px;
+}
+
+table, th, td {
+    border: 2px solid black;
+    border-collapse: collapse;
+}
+
+th {
+    padding: 8px;
+    font-weight: 100;
+    text-align: left;
+}
+
+td {
+    padding: 8px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.form-margin {
+    display: block;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+label {
+    width: 35px;
+    text-align: left;
+    float: left;
+    margin-right: 50px;
+    line-height: 20px;
+}
+
+#day, #desc, #cal {
+    width: 200px;
+    border: 1px solid #ccc;
+}
+
+.submitField {
+    margin-left: 10px;
+    width: 100px;
+}
