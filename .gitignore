@@ -1,8 +1,10 @@
+#Folders
 .idea
 out
 target
-*.iml
+doc
 log
+#Files
+*.iml
 *.patch
-
-
+*.md
