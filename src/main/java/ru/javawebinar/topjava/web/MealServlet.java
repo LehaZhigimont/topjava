@@ -53,9 +53,14 @@ public class MealServlet extends HttpServlet {
                 break;
             case "create":
             case "update":
-                final Meal meal = "create".equals(action) ?
-                        new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
-                        repository.get(getId(request));
+                Meal meal = null;
+                if ("create".equals(action)) {
+                    meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
+                    log.info("Create meal id={}", meal.getId());
+                } else if (repository.get(getId(request)).getUserId().equals(SecurityUtil.authUserId())) {
+                    meal = repository.get(getId(request));
+                    log.info("Update id={}", meal.getId());
+                }
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
@@ -65,14 +70,14 @@ public class MealServlet extends HttpServlet {
                 id = SecurityUtil.authUserId();
                 if (id >= 0) {
                     request.setAttribute("meals",
-                            MealsUtil.getTos(repository.getAll(id), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                            MealsUtil.getTos(id, repository.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
                     request.getRequestDispatcher("/meals.jsp").forward(request, response);
-                    break;
                 } else {
                     response.sendRedirect("index.html");
-                    break;
                 }
+                break;
         }
+
     }
 
     private int getId(HttpServletRequest request) {

@@ -20,9 +20,9 @@ public class InMemoryUserRepository implements UserRepository {
 
     {
         roles.add(Role.ADMIN);
-        repository.put(0, new User(0, "Admin", "Admin@admin.by", "Admin", 20000, true, roles));
+        repository.put(0, new User(0, "Admin", "admin@admin.by", "admin", 20000, true, roles));
         roles.add(Role.USER);
-        repository.put(1, new User(1, "User", "User@user.by", "User", 20000, false, roles));
+        repository.put(1, new User(1, "User", "User@user.by", "user", 20000, false, roles));
     }
 
     @Override
@@ -59,8 +59,6 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
-        System.out.println("InMemoruUserRepo - getByEmail");
-        System.out.println(repository.values().stream().filter(user -> user.getEmail().contains(email)).findFirst().orElse(null));
         return repository.values().stream().filter(user -> user.getEmail().contains(email)).findFirst().orElse(null);
     }
 }

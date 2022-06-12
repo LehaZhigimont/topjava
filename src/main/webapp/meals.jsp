@@ -36,12 +36,10 @@
 </div>
 <h2>Meals</h2>
 <a href="meals?action=create">Add Meal</a>
-<br><br>
 <table border="1" cellpadding="8" cellspacing="0">
     <thead>
     <tr>
         <th>id</th>
-        <th>User ID</th>
         <th>Date</th>
         <th>Description</th>
         <th>Calories</th>
@@ -63,5 +61,6 @@
         </tr>
     </c:forEach>
 </table>
+<br><br>
 </body>
 </html>
