@@ -18,7 +18,6 @@ import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
-
     private MealRepository repository;
 
     @Override
@@ -31,11 +30,11 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
 
-        Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
+        Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id), SecurityUtil.authUserId(),
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
-
+        System.out.println(meal);
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
         repository.save(meal);
         response.sendRedirect("meals");
@@ -63,10 +62,16 @@ public class MealServlet extends HttpServlet {
             case "all":
             default:
                 log.info("getAll");
-                request.setAttribute("meals",
-                        MealsUtil.getTos(repository.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
-                request.getRequestDispatcher("/meals.jsp").forward(request, response);
-                break;
+                id = SecurityUtil.authUserId();
+                if (id >= 0) {
+                    request.setAttribute("meals",
+                            MealsUtil.getTos(repository.getAll(id), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                    request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                    break;
+                } else {
+                    response.sendRedirect("index.html");
+                    break;
+                }
         }
     }
 

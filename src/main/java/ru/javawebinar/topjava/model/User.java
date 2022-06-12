@@ -20,7 +20,7 @@ public class User extends AbstractNamedEntity {
 
     private int caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
 
-    public User(Integer id, String name, String email, String password, Role... roles) {
+    public User(Integer id, String name, String email, String password, Role roles) {
         this(id, name, email, password, DEFAULT_CALORIES_PER_DAY, true, Arrays.asList((roles)));
     }
 
@@ -85,11 +85,11 @@ public class User extends AbstractNamedEntity {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", email=" + email +
                 ", name=" + name +
+                ", email=" + email +
                 ", enabled=" + enabled +
                 ", roles=" + roles +
                 ", caloriesPerDay=" + caloriesPerDay +
-                '}';
+                "}\n";
     }
 }

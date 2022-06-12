@@ -2,10 +2,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Java Enterprise (Topjava)</title>
+    <style>
+        div{
+            display: inline-block;
+            margin-left: 150px;
+            margin-top: 0;
+        }
+    </style>
 </head>
 <body>
-<h3>Проект <a href="https://github.com/JavaWebinar/topjava" target="_blank">Java Enterprise (Topjava)</a></h3>
-<hr>
+<div>
+    <div>
+        <h3>Проект <a href="https://github.com/JavaWebinar/topjava" target="_blank">Java Enterprise (Topjava)</a></h3>
+    </div>
+    <div>
+        <form method="post" action="users?action=login">
+            <input value="User@user.by" name="email" required>
+            <input type="password" value="User" name="password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <hr/>
+</div>
 <ul style="font-size: large">
     <li><a href="users">Users</a></li>
     <li><a href="meals">Meals</a></li>
