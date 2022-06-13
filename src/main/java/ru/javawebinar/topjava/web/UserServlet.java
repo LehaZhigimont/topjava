@@ -11,9 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.Objects;
-import java.util.Set;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -29,24 +28,16 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("doPOST");
         String id = request.getParameter("id");
         String action = request.getParameter("action");
-        Set<Role> roles = new HashSet<>();
-        roles.add(Role.USER);
         switch (action == null ? "all" : action) {
             case "login":
-                System.out.println("case login");
-                if (repositoryUser.getByEmail(getByEmail(request)) != null) {
-                    final User user = repositoryUser.getByEmail(getByEmail(request));
-                    SecurityUtil.loginUser(user.getId());
-                    request.setAttribute("users", repositoryUser.getAll());
-                    response.sendRedirect("meals");
-                    break;
-                }
+                SecurityUtil.setAuthUserId(getId(request));
+                request.setAttribute("users", repositoryUser.getAll());
+                response.sendRedirect("meals");
+                break;
             case "logout":
-                System.out.println("case logout");
-                SecurityUtil.loginUser(-1);
+                SecurityUtil.setAuthUserId(-1);
                 response.sendRedirect("index.html");
                 break;
             case "all":
@@ -54,7 +45,7 @@ public class UserServlet extends HttpServlet {
                 System.out.println("case default");
                 User user = new User(id.isEmpty() ? null : Integer.valueOf(id), (request.getParameter("name")),
                         request.getParameter("email"), request.getParameter("password"),
-                        Integer.parseInt(request.getParameter("calories")), true, roles);
+                        Integer.parseInt(request.getParameter("calories")), true, Arrays.asList((Role.USER)));
                 log.info(user.isNew() ? "Create {}" : "Update {}", user);
                 repositoryUser.save(user);
                 response.sendRedirect("users");
@@ -66,18 +57,9 @@ public class UserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("forward to users");
         String action = request.getParameter("action");
-        System.out.println("This doPost action - " + action);
         switch (action == null ? "all" : action) {
-            case "login":
-                System.out.println("doGET - login");
-                if (repositoryUser.getByEmail(getByEmail(request)) != null) {
-                    request.setAttribute("users", repositoryUser.getAll());
-                    request.getRequestDispatcher("/users.jsp").forward(request, response);
-                    break;
-                }
-                request.setAttribute("users", repositoryUser.getAll());
-                request.getRequestDispatcher("/users.jsp").forward(request, response);
             case "delete":
+                //add logic to delete for ID
                 int id = getId(request);
                 log.info("Delete id={}", id);
                 repositoryUser.delete(id);

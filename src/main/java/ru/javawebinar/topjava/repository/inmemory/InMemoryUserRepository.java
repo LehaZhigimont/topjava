@@ -14,15 +14,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Repository
 public class InMemoryUserRepository implements UserRepository {
     private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepository.class);
-    private final AtomicInteger counter = new AtomicInteger(1);
+    private final AtomicInteger counter = new AtomicInteger(0);
     private final Map<Integer, User> repository = new ConcurrentHashMap<>();
-    static Set<Role> roles = new HashSet<>();
 
     {
-        roles.add(Role.ADMIN);
-        repository.put(0, new User(0, "Admin", "admin@admin.by", "admin", 20000, true, roles));
-        roles.add(Role.USER);
-        repository.put(1, new User(1, "User", "User@user.by", "user", 20000, false, roles));
+        this.save(new User(null, "Admin", "admin@admin.by", "admin", 20000, true, Arrays.asList(Role.ADMIN, Role.USER)));
+        this.save(new User(null, "User", "User@user.by", "user", 20000, false, Arrays.asList(Role.USER)));
     }
 
     @Override
@@ -45,7 +42,7 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public User get(int id) {
         log.info("get {}", id);
-        return repository.get(id);
+        return repository.get(id)!= null ? repository.get(id) : null;
     }
 
     @Override
@@ -53,12 +50,14 @@ public class InMemoryUserRepository implements UserRepository {
         log.info("getAll");
         List<User> sortedUsersList = new ArrayList<>(repository.values());
         sortedUsersList.sort(Comparator.comparing(User::getName).thenComparing(User::getEmail));
-        return repository.isEmpty() ? null : sortedUsersList;
+        return sortedUsersList;
     }
 
     @Override
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
-        return repository.values().stream().filter(user -> user.getEmail().contains(email)).findFirst().orElse(null);
+        return repository.values().stream()
+                .filter(user -> user.getEmail().contains(email)).findFirst()
+                .orElse(null);
     }
 }

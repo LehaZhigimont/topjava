@@ -6,17 +6,11 @@ public class SecurityUtil {
     private static int authUser = -1;
 
     public static int authUserId() {
-        return getAuthUser() ;
-    }
-
-    public static int getAuthUser() {
         return authUser;
     }
-
-    public static void loginUser(int id) {
+    public static void setAuthUserId(int id) {
         authUser = id;
     }
-
     public static int authUserCaloriesPerDay() {
         return DEFAULT_CALORIES_PER_DAY;
     }

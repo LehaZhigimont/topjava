@@ -20,26 +20,48 @@
             margin-top: 0;
             margin-bottom: 0;
         }
+
     </style>
 </head>
 <body>
-<div>
-    <div>
-        <h3><a href="index.html">Home</a></h3>
-    </div>
-    <div>
-        <form method="post" action="users?action=logout">
-            <button type="submit">Logout</button>
-        </form>
-    </div>
-    <hr/>
-</div>
+<h3><a href="index.html">Home</a></h3>
+<hr/>
 <h2>Meals</h2>
 <a href="meals?action=create">Add Meal</a>
+
+
+<form id="filter">
+    <div>
+        <div>
+            <label for="startDate">От даты (включая)</label>
+            <input type="date" name="startDate" id="startDate" autocomplete="off">
+        </div>
+        <div>
+            <label for="endDate">До даты (включая)</label>
+            <input type="date" name="endDate" id="endDate" autocomplete="off">
+        </div>
+        <div>
+            <label for="startTime">От времени (включая)</label>
+            <input type="time" name="startTime" id="startTime" autocomplete="off">
+        </div>
+        <div>
+            <label for="endTime">До времени (исключая)</label>
+            <input type="time" name="endTime" id="endTime" autocomplete="off">
+        </div>
+    </div>
+    <div align="center">
+        <button>
+            Отменить
+        </button>
+        <button>
+            Отфильтровать
+        </button>
+    </div>
+</form>
+
 <table border="1" cellpadding="8" cellspacing="0">
     <thead>
     <tr>
-        <th>id</th>
         <th>Date</th>
         <th>Description</th>
         <th>Calories</th>
@@ -50,7 +72,6 @@
     <c:forEach items="${requestScope.meals}" var="meal">
         <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
         <tr class="${meal.excess ? 'excess' : 'normal'}">
-            <td>${meal.id}</td>
             <td>
                     ${fn:formatDateTime(meal.dateTime)}
             </td>

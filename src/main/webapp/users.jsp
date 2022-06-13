@@ -14,12 +14,9 @@
 <table border="1" cellpadding="8" cellspacing="0">
     <thead>
     <tr>
-        <th>id</th>
         <th>Имя</th>
         <th>Почта</th>
         <th>Роли</th>
-        <th>Пароль</th>
-        <th>Калории</th>
         <th>Активный</th>
         <th>Зарегистрирован</th>
         <th></th>
@@ -29,16 +26,13 @@
     <jsp:useBean id="users" scope="request" type="java.util.List"/>
     <c:forEach items="${users}" var="user">
         <tr>
-            <td>${user.id}</td>
             <td>${user.name}</td>
             <td>${user.email}</td>
             <td>
                 <c:forEach items="${user.roles}" var="role">
-                    ${role.role};
+                    ${role};
                 </c:forEach>
             </td>
-            <td>${user.password}</td>
-            <td>${user.caloriesPerDay}</td>
             <td>
                 <input type="checkbox" ${user.enabled ? 'checked' : 'unchecked'}
             </td>
